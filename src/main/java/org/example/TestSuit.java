@@ -16,18 +16,20 @@ import java.util.Date;
 
 public class TestSuit {
     protected static WebDriver driver;
-    public static void main(String[]args){
-        System.setProperty("webdriver.chrome.driver","src/test/java/Drivers/chromedriver.exe");
+
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "src/test/java/Drivers/chromedriver.exe");
         //chrome will open
         driver = new ChromeDriver(); //(in POM file)import chrome web-Driver dependency)
         //waiting of duration
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); //duration to be wait
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); //duration to be wait             //ImplicityWait
         //screen maximize
         driver.manage().window().maximize(); //maximizing screen
         //type URL opening web page
-        driver.get("https://demo.nopcommerce.com/");
+        driver.get("https://sandpiperweb.azureedge.net/Login");
+        //==================================================================================================================
 
-        //Click on registration Buttion
+        //Click on registration Buttion-------------------------------------
 
         //driver.findElement(By.className("ico-register")); //1
         clickOnElement(By.className("ico-register"));       //2
@@ -38,12 +40,12 @@ public class TestSuit {
         //Enter First Name------------------------
         //driver.findElement(By.xpath("//input[@name='FirstName']")).sendKeys("Smita");
         //driver.findElement(By.id("FirstName")).sendKeys("Smita"); //1
-        //typeText(By.id("FirstName"), "Smita");            //2
+        typeText(By.id("FirstName"), "Smita");            //2
 
         //Enter Last Name-------------------------
         //driver.findElement(By.xpath("//input[@id='LastName']")).sendKeys("Patel");
         //driver.findElement(By.id("LastName")).sendKeys("Patel");    //1
-        //typeText(By.id("LastName"), "Patel");              //2
+        typeText(By.id("LastName"), "Patel");              //2
 
         //Date of birth day----------------------
         Select birthDay = new Select(driver.findElement(By.name("DateOfBirthDay")));//select on the day
@@ -61,34 +63,55 @@ public class TestSuit {
         System.out.println(randomDate());
         //driver.findElement(By.xpath("//input[@id='Email']")).sendKeys("smita.mpatel164@gmail.com");
         //driver.findElement(By.id("Email")).sendKeys("smita.mpatel164@gmail.com");
-        //typeText(By.id("Email"), "smita.mpatel164" + randomDate() + "@gmail.com");
+        typeText(By.id("Email"), "smita.mpatel164" + randomDate() + "@gmail.com");
 
         //Enter Email----------------------------
         //driver.findElement(By.xpath("//input[@id='Password']")).sendKeys("mpatel164");
         //driver.findElement(By.id("Password")).sendKeys("mpatel164");
-       // typeText(By.id("Password"), "mpatel164");
+         typeText(By.id("Password"), "mpatel164");
 
         //Enter your confirm password-------------
         //driver.findElement(By.xpath("//input[@id='ConfirmPassword']")).sendKeys("mpatel164");
         //driver.findElement(By.id("ConfirmPassword")).sendKeys("mpatel164");
-        //typeText(By.id("ConfirmPassword"), "mpatel164");
+        typeText(By.id("ConfirmPassword"), "mpatel164");
+        //-------------------------------------------------------------------------------------------------------------------------------------
 
         //Click on register button------------------------
         //driver.findElement(By.xpath("//button[@id='register-button']")).click(); //belowsecond option  clickOnElement(By.id("register-button"));
         clickOnElement(By.id("register-button"));
+
+        //DriverWaait calling    // Explicity Wait any were u can use
+        driverWaitsUntilURLToBe(20, "https://sandpiperweb.azureedge.net/Registration");//call the methode and put the code any where you can use
+        driverWaitsUntilURLToBe(50, "https://sandpiperweb.azureedge.net"); //driver wait then go next
+
         String expectedMessage = "Your registration completed";
 
         String actualMessage = getTextFromElement(By.className("result")); //getteext retun method use here
-        System.out.println("Actual Message:"+actualMessage);
+        System.out.println("Actual Message:" + actualMessage);
 
         if (expectedMessage.equals(actualMessage)) {
             System.out.println("Your registration completed");
-        }else {
+        } else {
             System.out.println("Your registration is not completed");
         }
+
+
+        //Click on registration Buttion
+        clickOnElement(By.className("ico-login"));
+
+        //Enter Email-------------------------------
+        typeText(By.className("email"), "asmisha06@gmail.com"); //method 4
+
+        //Enter Password-------------------------------
+        typeText(By.id("Password"), "asmisha06");
+
+        //Click on login button------------------
+        clickOnElement(By.className("button-1 login-button"));
     }
+
+
 //========================================================================================================================
-    //All methods
+    //All reuseble methods
     //1 method-----------------------------------
     public static void clickOnElement(By by){                    //driver.findElement(By.xpath("//button[@id='register-button']")).click();
         driver.findElement(by).click();
@@ -130,10 +153,17 @@ public class TestSuit {
     }
     //10 method----------------------------------
 
-
+    public static void typeText(By by, String text)
+    {
+        driver.findElement(by).sendKeys(text);
+    }
     //11 method----------------------------------
 
 
+    public void selectByValueDropDown(By by, String value) {
+        Select select = new Select(driver.findElement(by));
+        select.selectByValue(value);
+    }
 //    public static void verifyCurrentUrl(String url){
 //        Assert.assertEquals(driver.getCurrentUrl(),url);
 //    }
@@ -144,9 +174,7 @@ public class TestSuit {
         //wait.until(ExpectedCondition.elementToBeClickable(By.Xpath("//button[@name='register-button']")));
         wait01.until(ExpectedConditions.urlToBe(url));                             //in same class you cant use same object name
 
-//    //Verify user is on correct registration page
-        driverWaitsUntilURLToBe(20,"https://sandpiperweb.azureedge.net/Registration");//call the methode and put the code any wher you can use
-        driverWaitsUntilURLToBe(50,"https://sandpiperweb.azureedge.net"); //driver wait then go next
+//
         //========================================================================================================
     }
 
